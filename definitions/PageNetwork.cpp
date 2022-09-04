@@ -49,6 +49,7 @@ vector<PageNode*> PageNetwork::getNextWeights(double dampingFactor) {
 
     // Dampening
     double initialWeight = 1.0 / this->pages.size();
+    // newWeight = (1 - dampingFactor) * initialWeight + dampingFactor * newWeight; // Alternative damping calculation
     newWeight = (1 - dampingFactor) + dampingFactor * newWeight;
 
     // Add the new page node with the new weight to the list of new weights
