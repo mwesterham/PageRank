@@ -98,18 +98,15 @@ int main() {
                 return p.second;
             });
 
-  Page page1(1);
-  Page page2(2);
-  Page page3(3);
-  Page page4(4);
+  cout << "Enter the number of iterations to run for: " << endl;
+  int iterations;
+  cin >> iterations;
 
-  page1.addPageReference(&page2);
-  page1.addPageReference(&page3);
-  page2.addPageReference(&page3);
-  page3.addPageReference(&page1);
-  page3.addPageReference(&page3);
+  cout << "Enter the damping factor to run with: " << endl;
+  string dampingFactorStr;
+  cin >> dampingFactorStr;
+  double dampingFactor = stod(dampingFactorStr);
 
-  // vector<Page*> networkPages{ &page1, &page2, &page3, &page4 };
   PageNetwork pageNetwork(networkPages);
-  pageNetwork.rankPages(30, 0.85, printWeights);
+  pageNetwork.rankPages(iterations, dampingFactor, printWeights);
 }
