@@ -9,26 +9,16 @@
 
 using namespace std;
 
+/**
+ * @brief Callback function called at the end of each iteration
+ * @param iter the current iteration
+ * @param weights the current page weights
+ */
 void printWeights(int iter, vector<PageNode*> weights) {
   cout << "Iteration " << iter << ":" << endl;
-  double sum = 0;
-  for(PageNode* pn : weights) {
+  for(PageNode* pn : weights)
     cout << "Page " << pn->page->getId() << " weight: " << pn->weight << endl;
-    sum += pn->weight;
-  }
   cout << endl;
-  cout << sum << endl;
-}
-
-void printAdjacencyMap(map<int, vector<int>> adjacencies) {
-  map<int, vector<int>>::iterator it;
-  for (it = adjacencies.begin(); it != adjacencies.end(); it++) {
-    cout << it->first << ':'<< endl;
-    for(int i : it->second) {
-      cout << i << " ";
-    }
-    cout << endl;
-  }
 }
 
 int main() {
@@ -61,16 +51,19 @@ int main() {
     adjacencies[i] = v;
   }
 
+  // Populate the adjacency map from user input
   string thisAdjecency;
   do {
     cin >> thisAdjecency;
 
+    // First number is the base page
     stringstream ssAdj(thisAdjecency);
     int id;
     ssAdj >> id;
     if (ssAdj.peek() == ',')
       ssAdj.ignore();
 
+    // All other numbers are the base page's adjacencies
     for (int i; ssAdj >> i;) {
       adjacencies[id].push_back(i);
       if (ssAdj.peek() == ',')
@@ -79,8 +72,6 @@ int main() {
 
   } while(thisAdjecency.compare("f") != 0);
 
-  // printAdjacencyMap(adjacencies);
-
   // Initialize all pages with ids
   map<int, Page*> pageMap;
   map<int, vector<int>>::iterator it1;
@@ -88,15 +79,13 @@ int main() {
     pageMap[it1->first] = new Page(it1->first);
 
   // Handle sinks, since we are using an algorithmic approach without matrices we do this manually
-  // by linking a sink to all pages
+  // by linking each sink to all pages. This is technically done during the algorithm
+  // but in this implementation it is done here instead
   map<int, Page*>::iterator it2;
-  for (it2 = pageMap.begin(); it2 != pageMap.end(); it2++) {
-    if(adjacencies[it2->first].size() == 0) {
-      for(int id : idList) {
+  for (it2 = pageMap.begin(); it2 != pageMap.end(); it2++)
+    if(adjacencies[it2->first].size() == 0)
+      for(int id : idList)
         adjacencies[it2->first].push_back(id);
-      }
-    }
-  }
 
   // Populate adjacencies
   for (it2 = pageMap.begin(); it2 != pageMap.end(); it2++)
@@ -111,15 +100,18 @@ int main() {
                 return p.second;
             });
 
+  // Retrieve the number of iterations to run for
   cout << "Enter the number of iterations to run for: " << endl;
   int iterations;
   cin >> iterations;
 
+  // Retrieve the damping factor
   cout << "Enter the damping factor to run with: " << endl;
   string dampingFactorStr;
   cin >> dampingFactorStr;
   double dampingFactor = stod(dampingFactorStr);
 
+  // Define the page network, then rank all pages
   PageNetwork pageNetwork(networkPages);
   pageNetwork.rankPages(iterations, dampingFactor, printWeights);
 }
