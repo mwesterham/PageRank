@@ -11,10 +11,13 @@ using namespace std;
 
 void printWeights(int iter, vector<PageNode*> weights) {
   cout << "Iteration " << iter << ":" << endl;
+  double sum = 0;
   for(PageNode* pn : weights) {
     cout << "Page " << pn->page->getId() << " weight: " << pn->weight << endl;
+    sum += pn->weight;
   }
   cout << endl;
+  cout << sum << endl;
 }
 
 void printAdjacencyMap(map<int, vector<int>> adjacencies) {
@@ -84,8 +87,18 @@ int main() {
   for (it1 = adjacencies.begin(); it1 != adjacencies.end(); it1++)
     pageMap[it1->first] = new Page(it1->first);
 
-  // Populate adjacencies
+  // Handle sinks, since we are using an algorithmic approach without matrices we do this manually
+  // by linking a sink to all pages
   map<int, Page*>::iterator it2;
+  for (it2 = pageMap.begin(); it2 != pageMap.end(); it2++) {
+    if(adjacencies[it2->first].size() == 0) {
+      for(int id : idList) {
+        adjacencies[it2->first].push_back(id);
+      }
+    }
+  }
+
+  // Populate adjacencies
   for (it2 = pageMap.begin(); it2 != pageMap.end(); it2++)
     for(int adjPageId : adjacencies[it2->first])
       pageMap[it2->first]->addPageReference(pageMap[adjPageId]);
