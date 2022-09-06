@@ -1,4 +1,5 @@
 #include <vector>
+#include <iostream>
 
 #include "Page.h"
 
@@ -26,11 +27,12 @@ class PageNetwork {
 
     /**
      * @brief Performs a page rank on the current pages in the network from scratch
+     * @param printStream what stream to call the callback with
      * @param iters the number of iterations to run the page rank algorithm
      * @param dampingFactor the damping factor to use in the ranking
      * @param funcCallback a callback function called after each iteration with the iteration and current weights as input
      */
-    void rankPages(int iters, double dampingFactor, void (*funcCallback)(int, std::vector<PageNode*>));
+    void rankPages(std::ostream& printStream, int iters, double dampingFactor, void (*funcCallback)(std::ostream&, int, std::vector<PageNode*>));
 
   private:
     std::vector<Page*> pages;

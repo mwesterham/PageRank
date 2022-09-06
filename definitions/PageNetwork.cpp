@@ -1,5 +1,6 @@
 #include <algorithm>
 #include <iostream>
+#include <iostream>
 
 #include "PageNetwork.h"
 
@@ -13,7 +14,7 @@ void PageNetwork::addPage(Page* page) {
   this->pages.push_back(page);
 }
 
-void PageNetwork::rankPages(int iters, double dampingFactor, void (*funcCallback)(int, vector<PageNode*>)) {
+void PageNetwork::rankPages(ostream& printStream, int iters, double dampingFactor, void (*funcCallback)(std::ostream&, int, vector<PageNode*>)) {
   // Initialize the page weights to 1/n where n is the number of pages in the network
   this->pageWeights.clear();
   int numPages = this->pages.size();
@@ -23,12 +24,12 @@ void PageNetwork::rankPages(int iters, double dampingFactor, void (*funcCallback
   }
 
   // Do callback with 0 iterations
-  funcCallback(0, this->pageWeights);
+  funcCallback(printStream, 0, this->pageWeights);
 
   // Run the algorithm
   for(int i = 0; i < iters; i++) {
     this->pageWeights = this->getNextWeights(dampingFactor);
-    funcCallback(i+1, this->pageWeights);
+    funcCallback(printStream, i+1, this->pageWeights);
   }
 }
 

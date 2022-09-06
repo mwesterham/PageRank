@@ -4,6 +4,7 @@
 #include <algorithm>
 #include <map>
 #include <string.h>
+#include <fstream>
 
 #include "definitions/PageNetwork.h"
 
@@ -11,14 +12,35 @@ using namespace std;
 
 /**
  * @brief Callback function called at the end of each iteration
+ * @param printStream the stream to print to
  * @param iter the current iteration
  * @param weights the current page weights
  */
-void printWeights(int iter, vector<PageNode*> weights) {
-  cout << "Iteration " << iter << ":" << endl;
+void printWeights(ostream& printStream, int iter, vector<PageNode*> weights) {
+  printStream << "Iteration " << iter << ":" << endl;
   for(PageNode* pn : weights)
-    cout << "Page " << pn->page->getId() << " weight: " << pn->weight << endl;
-  cout << endl;
+    printStream << "Page " << pn->page->getId() << " weight: " << pn->weight << endl;
+  printStream << endl;
+}
+
+/**
+ * @brief Callback function called at the end of each iteration to print in a csv-like format.
+ * @param printStream the stream to print to
+ * @param iter the current iteration
+ * @param weights the current page weights
+ */
+void printWeightsCSV(ostream& printStream, int iter, vector<PageNode*> weights) {
+  // Print the CSV titles if it is iteration 0
+  if(iter == 0) {
+    for(PageNode* pn : weights)
+      printStream << "Page_" << pn->page->getId() << ",";
+    printStream << "\n";
+  }
+
+  // Print in csv format
+  for(PageNode* pn : weights)
+    printStream << pn->weight << ",";
+  printStream << "\n";
 }
 
 int main() {
@@ -112,6 +134,12 @@ int main() {
   double dampingFactor = stod(dampingFactorStr);
 
   // Define the page network, then rank all pages
+  // PageNetwork pageNetwork(networkPages);
+  // pageNetwork.rankPages(cout, iterations, dampingFactor, printWeights);
+
+  ofstream txtOut;
+  txtOut.open("out.csv");
   PageNetwork pageNetwork(networkPages);
-  pageNetwork.rankPages(iterations, dampingFactor, printWeights);
+  pageNetwork.rankPages(txtOut, iterations, dampingFactor, printWeightsCSV);
+  txtOut.close();
 }
