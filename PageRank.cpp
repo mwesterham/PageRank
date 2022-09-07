@@ -32,14 +32,20 @@ void printWeights(ostream& printStream, int iter, vector<PageNode*> weights) {
 void printWeightsCSV(ostream& printStream, int iter, vector<PageNode*> weights) {
   // Print the CSV titles if it is iteration 0
   if(iter == 0) {
-    for(PageNode* pn : weights)
-      printStream << "Page_" << pn->page->getId() << ",";
+    printStream << "Iteration";
+    for(PageNode* pn : weights) {
+      printStream << ",";
+      printStream << "Page_" << pn->page->getId();
+    }
     printStream << "\n";
   }
 
   // Print in csv format
-  for(PageNode* pn : weights)
-    printStream << pn->weight << ",";
+  printStream << iter;
+  for(PageNode* pn : weights) {
+    printStream << ",";
+    printStream << pn->weight;
+  }
   printStream << "\n";
 }
 
