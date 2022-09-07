@@ -22,6 +22,8 @@ The results of running the page rank algorithm on each network are given in this
 successfully converged to the expected values seen in the sources. The calculated and expected values will also be
 listed.
 
+---
+
 ##### Network 1
 
 ![network1](readme_assets/network1_out_csv.png)
@@ -34,6 +36,8 @@ listed.
 | 4       | 0.0375            | 0.0375                   |
 
 Note: the scaled weights were calculated by dividing each weight by the sum of all weights.
+
+___
 
 ##### Network 2
 
@@ -50,6 +54,8 @@ Note: the scaled weights were calculated by dividing each weight by the sum of a
 | 7       | 0.0726596         | 0.0726                   |
 | 8       | 0.0726596         | 0.0726                   |
 
+___
+
 ##### Network 3
 
 ![network3](readme_assets/network3_out_csv.png)
@@ -63,7 +69,9 @@ Note: the scaled weights were calculated by dividing each weight by the sum of a
 | 5       | 0.0612511         |
 | 6       | 0.0642919         |
 
-##### Network 3
+___
+
+##### Network 4
 
 ![network4](readme_assets/network4_out_csv.png)
 
